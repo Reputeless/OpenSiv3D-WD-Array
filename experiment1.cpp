@@ -35,6 +35,30 @@ namespace s3d
 			return *this;
 		}
 
+		Array& each_index(std::function<void(size_t, Type&)> f)
+		{
+			size_t i = 0;
+
+			for (auto& v : *this)
+			{
+				f(i++, v);
+			}
+
+			return *this;
+		}
+
+		const Array& each_index(std::function<void(size_t, const Type&)> f) const
+		{
+			size_t i = 0;
+
+			for (const auto& v : *this)
+			{
+				f(i++, v);
+			}
+
+			return *this;
+		}
+
 		Array& map(std::function<Type(const Type&)> f)
 		{
 			for (auto& v : *this)
@@ -164,6 +188,9 @@ int main()
 	std::wcout << L"----------------\n";
 	v.mapped([](auto n) { return n * 0.5; })
 	 .each([](const auto& x) { std::wcout << x << L'\n'; });
+
+	std::wcout << L"----------------\n";
+	v.each_index([](size_t idx, const auto& x) { std::wcout << idx * 100 + x << L'\n'; });
 
 	std::wcout << L"----------------\n";
 	std::wcout << v.filtered([](int n) { return n % 2 == 0; }).join(L", ") << L'\n';
